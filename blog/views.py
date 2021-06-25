@@ -49,7 +49,7 @@ def post_detail(request, year, month, day, post):
     post_tags_ids = post.tags.values_list('id', flat=True)
     similiar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
     similiar_posts = similiar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')[:4]
-    comments = Comment.objects.filter(active=True)
+    comments = post.comments.all().filter(active=True)
     new_comment = None
 
     if request.method == 'POST':
